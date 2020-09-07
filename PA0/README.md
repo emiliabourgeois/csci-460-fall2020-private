@@ -39,6 +39,23 @@ zip:
 	echo "This is how I get dressed in the morning!" >> ~/README
 	zip ~/dress_dyi.zip ~/README ~/dressed.txt
 ```
+## Task 6.1
+```C
+void freeAllNodes(struct listnode *head)
+{
+    // TODO: fill me in, please! :-)
+    struct listnode *tmp;
+    //struct listnode *next;
+    while (head != NULL) {
+        tmp = head;
+        head = tmp->next;
+        free(tmp->name);
+        tmp->name = NULL;
+        free(tmp);
+        tmp = NULL;
+    }
+}
+```
 ## Task 7.1
 ```
 vagrant@vbox:~/projects/PA0/stategame$ gdb -q stategame
