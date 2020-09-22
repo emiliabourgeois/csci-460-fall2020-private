@@ -1,0 +1,43 @@
+* {
+  margin:0;
+  padding:0;
+  color: white;
+}
+
+body {
+  font-family:arial,sans-serif;
+  font-size:100%;
+  margin:3em;
+  text-align:center;
+  background-image: url("bg.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  height: 100%;
+}
+
+
+h3 {
+  font-size:100%;
+  font-weight:normal;
+  padding-top:1em;
+  padding-bottom:1em;
+}
+
+ul,li {
+  list-style:none;
+}
+
+ul {
+  overflow:hidden;
+  padding:3em;
+}
+
+li {
+  margin-left: auto;
+  margin-right: auto;
+  width: 20em;
+}
+
+a img:hover{
+  border:2px solid white;
+}

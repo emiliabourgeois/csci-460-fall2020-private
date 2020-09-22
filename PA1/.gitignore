@@ -1,0 +1,11 @@
+# ignore a local directory
+code-archive/
+.DS_Store
+*.o
+*.i
+*~
+photos/*.jpg
+*.html
+album
+.vagrant
+CS58_CODE_EXAMPLES
