@@ -1,4 +1,4 @@
 # PA1 ReadMe (Emilia Bourgeois)
-# Link to video: https://www.youtube.com/watch?v=1NsfKL1XU_Q&feature=youtu.be
+# Link to video: https://youtu.be/z4ICt1NECkg
 # Description 
  My program takes a user input in the format ```./album photos/*.jpg```, where the arg requires a directory that is not the directory of the root program and a file extension like the format above. It prompts the user to input the angle they want the image rotated and the caption they want on the website. After all images have been processed a website called ```index.html``` is created that can be opened on the local machine. The user will need to modify their inputs if they are told so by the program; i.e. unsupported file types, strings instead of numbers, no files at ell, etc. 
