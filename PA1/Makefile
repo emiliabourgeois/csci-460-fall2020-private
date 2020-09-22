@@ -1,9 +1,5 @@
-# Some inspriration from:
-# - http://nuclear.mutantstargoat.com/articles/make/
-# - https://www.cs.colostate.edu/~cs157/LectureMakefile.pdf
-
 CC      =  gcc
-CFLAGS  = -Wall -pedantic -std=c11 -ggdb #-save-temps
+CFLAGS  = -Wall -pedantic -std=c11 -ggdb 
 LDFLAGS =
 SRCS    = $(wildcard *.c)
 OBJS    = $(SRCS:.c=.o)
@@ -21,6 +17,4 @@ $(TARGET): $(OBJS)
 .PHONY: clean
 clean:
 	rm -rf $(OBJS) $(TARGET) *~
-	rm -rf photos/finals/*
-	rm -rf photos/thumbnails/*
 	rm -f index.html

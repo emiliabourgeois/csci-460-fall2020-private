@@ -1,16 +1,3 @@
-/*
- * demo.c
- *
- * Sample code to collect input from the user
- *
- * Sometimes, when you want both single-char input and longer text input,
- * using scanf and getc and such, one fetch may leave unconsumed characters
- * in stdin that confuses subsequent fetches.
- *
- * Trailing newlines also can cause trouble.
- *
- * Should these things cause you problems in pa1, this code may prove helpful.
- */
 #define _POSIX_SOURCE
 #include <stdio.h>
 #include <string.h>
@@ -24,21 +11,27 @@
 #include <ctype.h>
 
 
-/*
- * testing final the readline code
- */
-
 int main(int argc, char * argv[])
-{
+{   
+
+    if(argv[1] == NULL) {
+        fprintf(stdout, "Enter a paramter like photos/*.jpg\n");
+        return -1;
+    }
+    
+    
+    //initializes variables
     char * exts[]= {".jpg", ".gif", ".png", ".bmp", ".svg", ".webp", ".ico", ".raw"};
     char str[128];
     char *token;
     strcpy(str, argv[1]);
     struct dirent *de;
+    //split arg for directory
     char *directory = strcat(strtok_r(str, "/", &token), "/");
     char *ext;
+    //find extension
     ext = strrchr(argv[1], '.');
-
+    //compare extension to supported ones
     int len = sizeof(exts)/sizeof(exts[0]);
     int w = 0;
     for(int j = 0; j < len; ++j){
@@ -48,18 +41,19 @@ int main(int argc, char * argv[])
     }
     if(w == 0){
         fprintf(stdout, "%s is an unsupported file type\n", ext);
-        return 0;
+        return -1;
     }
 
     int count = 0;
-
+    //opens directory
     DIR *dr = opendir(directory);
 
     if(dr == NULL) {
         fprintf(stdout, "Could not open directory %s\n", directory);
-        return 0;
+        return -1;
     }
 
+    //Beginning of webpage
     FILE *ptrFile = fopen("index.html", "w");
     fprintf(ptrFile, "<!DOCTYPE html>\n");
     fprintf(ptrFile, "<html>\n");
@@ -71,11 +65,13 @@ int main(int argc, char * argv[])
     fprintf(ptrFile, "<h1>Emilia Bourgeois PA1 Photo Album</h1>\n");
     fprintf(ptrFile, "<ul>\n");
 
+    //while loop to loop through files
     while((de = readdir(dr)) != NULL){
+        //stores name
         char *name = de->d_name;
         if(strstr(name, ext) != NULL){
-            //fprintf(stdout, "%s", de->d_name);
-
+            //performs transformations as long as file is of the specified extension
+            //initializes file names
             char in[100];
             strcpy(in, directory);
             strcat(in, de->d_name);
@@ -89,7 +85,7 @@ int main(int argc, char * argv[])
             strcat(final, de->d_name);
            
             
-            
+            //forks for thumbnail
             fprintf(stdout, "-> Converting: '%s'\n", in);
             pid_t rc = fork();
             if (0 == rc) {
@@ -97,14 +93,15 @@ int main(int argc, char * argv[])
                 fprintf(stdout, "**error: cannot convert '%s'.**\n", in);
                 exit(-1);
             }
-            
+            //forks for displaying image
             pid_t view = fork();
             if(0 == view) {
-                sleep(2);
+                sleep(2); //basic sleep so the resize works
                 execlp("display", "display", thumb, NULL);
                 fprintf(stdout, "**error: cannot display '%s'.**\n", in);
                 exit(-1);
             }
+            //reads in user input for angle of rotation
             const int lineLength = 50;
             char line[lineLength]; 
             char * d;
@@ -115,7 +112,7 @@ int main(int argc, char * argv[])
                 
                 fprintf(stdout, "Enter rotation (0 for no rotation): ");
                 if (readLine(line, lineLength)) {
-                    if(strlen(line) <= 1){
+                    if(strlen(line) <= 1){ //case for if only enter is pressed for input
                         n = 1;
                         fprintf (stdout, "Please enter a number\n");
                     }
@@ -133,38 +130,42 @@ int main(int argc, char * argv[])
                     d = line;
                 }
             }
-            
+            //rotate fork
             pid_t rotate = fork();
             if(0 == rotate){
                 execlp("convert", "convert", in, "-geometry", "75%", "-rotate", d, final , NULL);
                 fprintf(stdout, "**error: cannot rotate '%s'.**\n", in);
                 exit(-1);
             }
-
+            //caption input
             char * caption;
             fprintf(stdout, "Enter caption: ");
             if (readLine(line, lineLength)) {
                 caption = line;
             }
 
-
+            //adds images as a list 
             fprintf(ptrFile, "<li>\n");
             fprintf(ptrFile, "<h3>%s</h3>\n", caption);
             fprintf(ptrFile, "<a href=\"%s\"><img src=\"%s\"></a>\n", final, thumb);
             fprintf(ptrFile, "</li>\n");
-
+            //kills display
             kill(view, SIGTERM);
         }
         else{
+            //if file is unsupported throws error
             fprintf(stdout, "Incorrect input for: %s, file should be a %s file\n", name, ext);
             continue; 
         }
+        //count to track # of files
         count++;
     }
-
-    if(count == 0)
+    //yells at you if there were no valid input files
+    if(count == 0){
         fprintf(stdout, "No images found\n");
-
+        return -1;
+    }
+    //ends and closes html doc
     fprintf(ptrFile, "</ul>\n");
     fprintf(ptrFile, "</BODY>\n"); 
     fprintf(ptrFile, "</HTML>"); 
