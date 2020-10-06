@@ -13,7 +13,7 @@
 #define NUM_THREADS 10
 
 static int target = 1000;
-// static int target = 100000000; // now try uncommenting me....
+// static int target = 100000000; // now try uncommenting me.... (and commenting out the line above)
 
 // a global variable shared by all threads...
 static volatile int counter = 0;
@@ -23,15 +23,17 @@ pthread_mutex_t mutexsum; //<<<<<<<<<<<<<<<<<<<< declare the mutex (our "global"
 // mythread()
 // Simply adds 1 to counter repeatedly, in a loop
 void *mythread(void *arg) {
+    printf("%d: begin\n", (int) arg);
     for (int i = 0; i < target; i++) {
         pthread_mutex_lock (&mutexsum); //<<<<<<<<<<<<<<<<<<<< lock!
         counter += 1;
         pthread_mutex_unlock (&mutexsum);  //<<<<<<<<<<<<<<<<<<<< unlock!
     }
+    printf("%d: done\n", (int) arg);
     pthread_exit(NULL);
 }
 
-int main(int argc, char *argv[]) {
+int main(void) {
     pthread_mutex_init(&mutexsum, NULL);  //<<<<<<<<<<<<<<<<<<<< initialize the mutex
 
     printf("main: begin (counter = %d)\n", counter);
@@ -41,7 +43,7 @@ int main(int argc, char *argv[]) {
     long t;
 
     // create threads that count
-    for(t=0; t<NUM_THREADS; t++){
+    for (t = 0; t < NUM_THREADS; t++){
        rc = pthread_create(&threads[t], NULL, mythread, (void *)t);  //<<<<<<<<<<<<<<<<<<<< create threads
        if (rc){
           printf("ERROR; return code from pthread_create() is %d\n", rc);
@@ -51,7 +53,7 @@ int main(int argc, char *argv[]) {
 
     // wait for the threads to finish
     // -> pthread_join() blocks the calling thread until the specified thread terminates.
-    for(t=0; t<NUM_THREADS; t++){
+    for (t = 0; t < NUM_THREADS; t++){
        rc = pthread_join(threads[t], NULL); //<<<<<<<<<<<<<<<<<<<< wait for threads to finish
        if (rc){
           fprintf(stderr, "ERROR; return code from pthread_join() is %d\n", rc);

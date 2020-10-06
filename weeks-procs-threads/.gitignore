@@ -1,5 +1,8 @@
 .DS_Store
 .dSYM
+*.i
+*.s
+*.o
 
 fork1
 fork2
@@ -33,3 +36,10 @@ threads2
 atm
 thread_atm
 thread_spy
+ipt
+sync_lock
+sync_lock_tests
+sync_cvar
+sync_sem
+sync_grand_demo
+rand_test
