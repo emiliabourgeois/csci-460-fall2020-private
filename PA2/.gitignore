@@ -1,0 +1,5 @@
+*.o
+*.i
+*~
+b2bsim
+.vagrant
