@@ -1,0 +1,4 @@
+# PA1 ReadMe (Emilia Bourgeois)
+# Link to video: 
+## Description
+My program takes parameters from the command line like so: ```./b2bsim NUMCARS MAXCARS [RANDSEED] [VERBOSITY] ```. What this does is take in two required parameters (MAXCARS & NUMCARS), and two optional ones (RANDSEED & VERBOSITY). Note that both RANDSEED & VERBOSITY are required if you want verbosity, just RANDSEED should work fine though. The program creates a thread for each car, and simulates them trying to cross a dangerous one way to or from Bridger bowl and Bozeman. The program only allows a maximum of two cars heading a single direction to go at once, and generally picks whoever is the first available. The results are printed out with a summary, unless VERBOSITY is set to 1. If it is, you get a lot of the program's inner workings.
