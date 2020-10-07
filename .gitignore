@@ -1,4 +1,5 @@
 # ignore a local directory
+test/
 code-archive/
 .DS_Store
 *.o
